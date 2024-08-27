@@ -3,16 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Incrustar GitHub Pages</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <title>Contenido desde GitHub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 
 <div class="container mt-5">
-    <h1>Contenido Incrustado de GitHub Pages</h1>
-    <iframe src="https://USERNAME.github.io/REPOSITORY" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
+    <h1>Contenido del Repositorio GitHub</h1>
+    <iframe id="github-iframe" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
 </div>
 
+<script>
+    fetch('https://api.github.com/repos/ileathan/hubot-mubot/contents/src/mubot.coffee')
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(data) {
+            // Decodificar el contenido Base64
+            var decodedContent = atob(data.content);
+            // Convertir el contenido en un formato adecuado para el iframe
+            var iframe = document.getElementById('github-iframe');
+            iframe.src = 'data:text/plain;charset=utf-8,' + encodeURIComponent(decodedContent);
+        })
+        .catch(function(error) {
+            console.error('Error al cargar el contenido:', error);
+            document.getElementById('github-iframe').innerHTML = '<p>Error al cargar el contenido.</p>';
+        });
+</script>
+
+<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
